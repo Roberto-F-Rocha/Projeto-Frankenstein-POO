@@ -4,7 +4,6 @@ import com.example.models.ClienteModel;
 import com.example.view.ClienteView;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -18,13 +17,14 @@ public class ClienteController {
     }
 
     public void iniciar() {
-        // Configurações de conexão com o banco de dados
-        String url = "jdbc:mysql://localhost/poobanco";
-        String usuario = "root";
-        String senha = "";
+        try {
+            // Criando uma instância de ConexaoController
+            ConexaoController conexaoController = new ConexaoController();
 
-        try (Connection conexao = DriverManager.getConnection(url, usuario, senha)) {
-            Scanner scanner = new Scanner(System.in);
+            // Obtendo a conexão
+            Connection conexao = conexaoController.conectar();
+
+            Scanner scanner = new Scanner(System.in,"CP850");
             int opcao;
 
             // Loop para exibir o menu e processar as opções do usuário
