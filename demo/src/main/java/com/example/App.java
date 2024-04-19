@@ -2,16 +2,19 @@ package com.example;
 
 import com.example.controllers.AnimalEstimacaoController;
 import com.example.controllers.ClienteController;
-import com.example.controllers.ServicoController; // Import adicionado
-import com.example.controllers.FaturaController; // Import adicionado
+import com.example.controllers.ServicoController;
+import com.example.controllers.FaturaController;
+import com.example.controllers.ProdutoController; // Import adicionado
 import com.example.models.AnimalEstimacaoModel;
 import com.example.models.ClienteModel;
-import com.example.models.ServicoModel; // Import adicionado
-import com.example.models.FaturaModel; // Import adicionado
+import com.example.models.ServicoModel;
+import com.example.models.FaturaModel;
+import com.example.models.ProdutoModel; // Import adicionado
 import com.example.view.AnimalEstimacaoView;
 import com.example.view.ClienteView;
-import com.example.view.ServicoView; // Import adicionado
-import com.example.view.FaturaView; // Import adicionado
+import com.example.view.ServicoView;
+import com.example.view.FaturaView;
+import com.example.view.ProdutoView; // Import adicionado
 
 import java.util.Scanner;
 
@@ -26,13 +29,17 @@ public class App {
         AnimalEstimacaoView animalView = new AnimalEstimacaoView();
         AnimalEstimacaoController animalController = new AnimalEstimacaoController(animalModel, animalView);
 
-        ServicoModel servicoModel = new ServicoModel(); // Instância do ServicoModel
-        ServicoView servicoView = new ServicoView(); // Instância do ServicoView
-        ServicoController servicoController = new ServicoController(servicoModel, servicoView); // Instância do ServicoController
+        ServicoModel servicoModel = new ServicoModel();
+        ServicoView servicoView = new ServicoView();
+        ServicoController servicoController = new ServicoController(servicoModel, servicoView);
 
         FaturaModel faturaModel = new FaturaModel();
         FaturaView faturaView = new FaturaView();
-        FaturaController faturaController = new FaturaController(faturaModel, faturaView); // Instância do FaturaModel
+        FaturaController faturaController = new FaturaController(faturaModel, faturaView);
+
+        ProdutoModel produtoModel = new ProdutoModel(); // Instância do ProdutoModel
+        ProdutoView produtoView = new ProdutoView(); // Instância do ProdutoView
+        ProdutoController produtoController = new ProdutoController(produtoModel, produtoView); // Instância do ProdutoController
 
         int opcao;
 
@@ -40,9 +47,10 @@ public class App {
             System.out.println("\nEscolha uma opção:");
             System.out.println("1. Operações do Cliente");
             System.out.println("2. Operações de Animais de Estimação");
-            System.out.println("3. Operações de Serviço"); // Nova opção adicionada
-            System.out.println("4. Operações de Fatura"); // Nova opção adicionada
-            System.out.println("5. Sair"); // Opção de sair movida para 4
+            System.out.println("3. Operações de Serviço");
+            System.out.println("4. Operações de Fatura");
+            System.out.println("5. Operações de Produto"); // Nova opção adicionada
+            System.out.println("6. Sair"); 
             System.out.print("Escolha: ");
 
             opcao = scanner.nextInt();
@@ -57,14 +65,18 @@ public class App {
                     animalController.iniciar();
                     break;
                 case 3:
-                    System.out.println("\nMenu Serviço:"); // Mensagem adicionada
-                    servicoController.iniciar(); // Chamada para iniciar o menu de Serviço
+                    System.out.println("\nMenu Serviço:");
+                    servicoController.iniciar(); 
                     break;
                 case 4:
-                    System.out.println("\nMenu Fatura:"); // Mensagem adicionada
-                    faturaController.iniciar(); // Chamada para iniciar o menu de Serviço
+                    System.out.println("\nMenu Fatura:");
+                    faturaController.iniciar(); 
                     break;
                 case 5:
+                    System.out.println("\nMenu Produto:"); // Mensagem adicionada
+                    produtoController.iniciar(); // Chamada para iniciar o menu de Produto
+                    break;
+                case 6:
                     System.out.println("Saindo do programa. Até mais!");
                     scanner.close();
                     break;
@@ -72,6 +84,6 @@ public class App {
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                     break;
             }
-        } while (opcao != 5); // Condição alterada para 4
+        } while (opcao != 6); // Condição alterada para 6
     }
 }
