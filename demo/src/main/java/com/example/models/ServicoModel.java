@@ -87,26 +87,29 @@ public class ServicoModel {
             System.out.println("Digite o ID do cliente para visualizar os serviços:");
             int idCliente = scanner.nextInt();
             scanner.nextLine(); // Consumir a quebra de linha após o próximoInt()
-
+    
             // Preparar a declaração SQL para selecionar os serviços associados ao ID do cliente fornecido
-            String sql = "SELECT * FROM servico WHERE idClienteServico = ?";
+            String sql = "SELECT s.idServico, u.nome AS nomeCliente, s.tipoServico " +
+                         "FROM servico s " +
+                         "INNER JOIN usuario u ON s.idClienteServico = u.id " +
+                         "WHERE s.idClienteServico = ?";
             PreparedStatement statement = conexao.prepareStatement(sql);
             statement.setInt(1, idCliente);
-
+    
             // Executar a declaração SQL e obter o resultado
             ResultSet resultSet = statement.executeQuery();
-
+    
             // Exibir informações de todos os serviços associados ao ID do cliente
             while (resultSet.next()) {
                 System.out.println("ID do Serviço: " + resultSet.getInt("idServico"));
-                System.out.println("ID do Cliente: " + resultSet.getInt("idClienteServico"));
+                System.out.println("Nome do Cliente: " + resultSet.getString("nomeCliente"));
                 System.out.println("Tipo de Serviço: " + resultSet.getString("tipoServico"));
                 System.out.println("----------------------");
             }
         } catch (SQLException ex) {
             System.out.println("Ocorreu um erro ao visualizar os serviços: " + ex.getMessage());
         }
-    }
+    }    
 
     public void editarServico(Connection conexao, Scanner scanner) {
         try {
@@ -138,17 +141,19 @@ public class ServicoModel {
 
     public void listarServicos(Connection conexao) {
         try {
-            // Preparar a declaração SQL para selecionar todos os serviços
-            String sql = "SELECT * FROM servico";
+            // Preparar a declaração SQL para selecionar todos os serviços com o nome do cliente
+            String sql = "SELECT s.idServico, u.nome AS nomeCliente, s.tipoServico " +
+                         "FROM servico s " +
+                         "INNER JOIN usuario u ON s.idClienteServico = u.id";
             PreparedStatement statement = conexao.prepareStatement(sql);
-
+    
             // Executar a declaração SQL e obter o resultado
             ResultSet resultSet = statement.executeQuery();
-
-            // Exibir informações de todos os serviços
+    
+            // Exibir informações de todos os serviços com o nome do cliente
             while (resultSet.next()) {
                 System.out.println("ID do Serviço: " + resultSet.getInt("idServico"));
-                System.out.println("ID do Cliente: " + resultSet.getInt("idClienteServico"));
+                System.out.println("Nome do Cliente: " + resultSet.getString("nomeCliente"));
                 System.out.println("Tipo de Serviço: " + resultSet.getString("tipoServico"));
                 System.out.println("----------------------");
             }

@@ -112,25 +112,30 @@ public class FaturaModel {
             // Solicitar o ID da fatura a ser visualizada
             System.out.print("Digite o ID da fatura a ser visualizada: ");
             int idFatura = scanner.nextInt();
-
+            scanner.nextLine(); // Limpar o buffer de entrada
+    
             // Preparar a declaração SQL para selecionar a fatura na tabela
-            String sql = "SELECT * FROM fatura WHERE idFatura = ?";
+            String sql = "SELECT f.idFatura, u.nome AS nomeCliente, f.tipoServico, f.metodoPagamento, f.dataFatura, " +
+                         "f.valorFatura, f.descricaoPagamento, f.pagamentoFatura " +
+                         "FROM fatura f " +
+                         "INNER JOIN usuario u ON f.idClienteServico = u.id " +
+                         "WHERE f.idFatura = ?";
             PreparedStatement statement = conexao.prepareStatement(sql);
-
+    
             // Definir o valor do parâmetro da declaração SQL com o ID da fatura
             statement.setInt(1, idFatura);
-
+    
             // Executar a declaração SQL e obter o resultado
             ResultSet resultSet = statement.executeQuery();
-
+    
             // Exibir as informações da fatura
             if (resultSet.next()) {
                 System.out.println("ID da Fatura: " + resultSet.getInt("idFatura"));
-                System.out.println("ID do Cliente Serviço: " + resultSet.getInt("idClienteServico"));
-                System.out.println("Método de Pagamento: " + resultSet.getString("tipoServico"));
+                System.out.println("Nome do Cliente: " + resultSet.getString("nomeCliente"));
+                System.out.println("Tipo de Serviço: " + resultSet.getString("tipoServico"));
+                System.out.println("Método de Pagamento: " + resultSet.getString("metodoPagamento"));
                 System.out.println("Data da Fatura: " + resultSet.getDate("dataFatura"));
                 System.out.println("Valor da Fatura: " + resultSet.getFloat("valorFatura"));
-                System.out.println("Método de Pagamento: " + resultSet.getString("metodoPagamento"));
                 System.out.println("Descrição do Pagamento: " + resultSet.getString("descricaoPagamento"));
                 System.out.println("Pagamento da Fatura: " + (resultSet.getBoolean("pagamentoFatura") ? "Sim" : "Não"));
             } else {
@@ -144,28 +149,90 @@ public class FaturaModel {
     public void listarFaturas(Connection conexao) {
         try {
             // Preparar a declaração SQL para selecionar todas as faturas na tabela
-            String sql = "SELECT * FROM fatura";
+            String sql = "SELECT f.idFatura, u.nome, f.tipoServico, f.metodoPagamento, f.dataFatura, " +
+                         "f.valorFatura, f.descricaoPagamento, f.pagamentoFatura " +
+                         "FROM fatura f " +
+                         "INNER JOIN usuario u ON f.idClienteServico = u.id";
             PreparedStatement statement = conexao.prepareStatement(sql);
-
+    
             // Executar a declaração SQL e obter o resultado
             ResultSet resultSet = statement.executeQuery();
-
+    
             // Exibir as informações de todas as faturas
             while (resultSet.next()) {
                 System.out.println("ID da Fatura: " + resultSet.getInt("idFatura"));
-                System.out.println("ID do Cliente Serviço: " + resultSet.getInt("idClienteServico"));
+                System.out.println("Nome do Usuário: " + resultSet.getString("nome"));
                 System.out.println("Tipo de Serviço: " + resultSet.getString("tipoServico"));
                 System.out.println("Método de Pagamento: " + resultSet.getString("metodoPagamento"));
                 System.out.println("Data da Fatura: " + resultSet.getDate("dataFatura"));
                 System.out.println("Valor da Fatura: " + resultSet.getFloat("valorFatura"));
-                System.out.println("Método de Pagamento: " + resultSet.getString("metodoPagamento"));
                 System.out.println("Descrição do Pagamento: " + resultSet.getString("descricaoPagamento"));
-                System.out.println("Pagamento da Fatura: " + (resultSet.getBoolean("pagamentoFatura") ? "Sim" : "Não"));
+                System.out.println("Pagamento da Fatura: " + resultSet.getString("pagamentoFatura"));
                 System.out.println("----------------------");
             }
         } catch (SQLException ex) {
             System.out.println("Ocorreu um erro ao listar as faturas: " + ex.getMessage());
         }
     }
+
+    public void atualizarStatusDePagamento(Connection conexao, Scanner scanner) {
+        try {
+            // Solicitar o ID da fatura a ser atualizada
+            System.out.print("Digite o ID da fatura a ser atualizada: ");
+            int idFatura = scanner.nextInt();
+            scanner.nextLine(); // Limpar o buffer de entrada
+            
+            // Preparar a declaração SQL para selecionar a fatura com o ID fornecido
+            String sqlSelect = "SELECT f.idFatura, u.nome AS nomeCliente, f.tipoServico, f.metodoPagamento, f.dataFatura, " +
+                               "f.valorFatura, f.descricaoPagamento, f.pagamentoFatura " +
+                               "FROM fatura f " +
+                               "INNER JOIN usuario u ON f.idClienteServico = u.id " +
+                               "WHERE idFatura = ?";
+            PreparedStatement selectStatement = conexao.prepareStatement(sqlSelect);
+            selectStatement.setInt(1, idFatura);
+            ResultSet resultSet = selectStatement.executeQuery();
+            
+            // Verificar se a fatura com o ID fornecido existe
+            if (resultSet.next()) {
+                // Exibir as informações da fatura
+                System.out.println("Informações da Fatura:");
+                System.out.println("ID da Fatura: " + resultSet.getInt("idFatura"));
+                System.out.println("Nome do Cliente: " + resultSet.getString("nomeCliente"));
+                System.out.println("Tipo de Serviço: " + resultSet.getString("tipoServico"));
+                System.out.println("Método de Pagamento: " + resultSet.getString("metodoPagamento"));
+                System.out.println("Data da Fatura: " + resultSet.getDate("dataFatura"));
+                System.out.println("Valor da Fatura: " + resultSet.getFloat("valorFatura"));
+                System.out.println("Descrição do Pagamento: " + resultSet.getString("descricaoPagamento"));
+                System.out.println("Pagamento da Fatura: " + resultSet.getString("pagamentoFatura"));
+                
+                // Solicitar o novo status de pagamento
+                String novoPagamento;
+                do {
+                    System.out.print("Digite o novo status de pagamento (Sim/Não): ");
+                    novoPagamento = scanner.nextLine().trim();
+                    if (!novoPagamento.equalsIgnoreCase("Sim") && !novoPagamento.equalsIgnoreCase("Não")) {
+                        System.out.println("Entrada inválida. Por favor, digite 'Sim' ou 'Não'.");
+                    }
+                } while (!novoPagamento.equalsIgnoreCase("Sim") && !novoPagamento.equalsIgnoreCase("Não"));
+                
+                // Preparar a declaração SQL para atualizar o status de pagamento
+                String sqlUpdate = "UPDATE fatura SET pagamentoFatura = ? WHERE idFatura = ?";
+                PreparedStatement updateStatement = conexao.prepareStatement(sqlUpdate);
+                updateStatement.setString(1, novoPagamento);
+                updateStatement.setInt(2, idFatura);
+                
+                // Executar a declaração SQL para atualizar o status de pagamento
+                updateStatement.executeUpdate();
+                
+                System.out.println("Status de pagamento atualizado com sucesso.");
+            } else {
+                System.out.println("Fatura com o ID fornecido não encontrada.");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Ocorreu um erro ao atualizar o status de pagamento: " + ex.getMessage());
+        }
+    }
+    
+    
 }
 

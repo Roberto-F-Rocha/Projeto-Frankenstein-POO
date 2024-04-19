@@ -4,17 +4,20 @@ import com.example.controllers.AnimalEstimacaoController;
 import com.example.controllers.ClienteController;
 import com.example.controllers.ServicoController;
 import com.example.controllers.FaturaController;
-import com.example.controllers.ProdutoController; // Import adicionado
+import com.example.controllers.ProdutoController;
+import com.example.controllers.AvaliacaoController; // Import adicionado
 import com.example.models.AnimalEstimacaoModel;
 import com.example.models.ClienteModel;
 import com.example.models.ServicoModel;
 import com.example.models.FaturaModel;
-import com.example.models.ProdutoModel; // Import adicionado
+import com.example.models.ProdutoModel;
+import com.example.models.AvaliacaoModel; // Import adicionado
 import com.example.view.AnimalEstimacaoView;
 import com.example.view.ClienteView;
 import com.example.view.ServicoView;
 import com.example.view.FaturaView;
-import com.example.view.ProdutoView; // Import adicionado
+import com.example.view.ProdutoView;
+import com.example.view.AvaliacaoView; // Import adicionado
 
 import java.util.Scanner;
 
@@ -37,9 +40,13 @@ public class App {
         FaturaView faturaView = new FaturaView();
         FaturaController faturaController = new FaturaController(faturaModel, faturaView);
 
-        ProdutoModel produtoModel = new ProdutoModel(); // Instância do ProdutoModel
-        ProdutoView produtoView = new ProdutoView(); // Instância do ProdutoView
-        ProdutoController produtoController = new ProdutoController(produtoModel, produtoView); // Instância do ProdutoController
+        ProdutoModel produtoModel = new ProdutoModel(); 
+        ProdutoView produtoView = new ProdutoView(); 
+        ProdutoController produtoController = new ProdutoController(produtoModel, produtoView); 
+
+        AvaliacaoModel avaliacaoModel = new AvaliacaoModel(); // Instância do AvaliacaoModel
+        AvaliacaoView avaliacaoView = new AvaliacaoView(); // Instância do AvaliacaoView
+        AvaliacaoController avaliacaoController = new AvaliacaoController(avaliacaoModel, avaliacaoView); // Instância do AvaliacaoController
 
         int opcao;
 
@@ -49,8 +56,9 @@ public class App {
             System.out.println("2. Operações de Animais de Estimação");
             System.out.println("3. Operações de Serviço");
             System.out.println("4. Operações de Fatura");
-            System.out.println("5. Operações de Produto"); // Nova opção adicionada
-            System.out.println("6. Sair"); 
+            System.out.println("5. Operações de Produto"); 
+            System.out.println("6. Operações de Avaliação"); // Nova opção adicionada
+            System.out.println("7. Sair"); // Ajuste para a nova opção
             System.out.print("Escolha: ");
 
             opcao = scanner.nextInt();
@@ -73,10 +81,14 @@ public class App {
                     faturaController.iniciar(); 
                     break;
                 case 5:
-                    System.out.println("\nMenu Produto:"); // Mensagem adicionada
-                    produtoController.iniciar(); // Chamada para iniciar o menu de Produto
+                    System.out.println("\nMenu Produto:"); 
+                    produtoController.iniciar(); 
                     break;
                 case 6:
+                    System.out.println("\nMenu Avaliação:"); // Mensagem adicionada
+                    avaliacaoController.iniciar(); // Chamada para iniciar o menu de Avaliação
+                    break;
+                case 7:
                     System.out.println("Saindo do programa. Até mais!");
                     scanner.close();
                     break;
@@ -84,6 +96,6 @@ public class App {
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                     break;
             }
-        } while (opcao != 6); // Condição alterada para 6
+        } while (opcao != 7); // Condição alterada para 7
     }
 }

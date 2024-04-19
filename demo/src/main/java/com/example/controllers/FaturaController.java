@@ -41,18 +41,22 @@ public class FaturaController {
                         faturaModel.visualizarFatura(conexao, scanner);
                         break;
                     case 2:
+                        faturaView.exibirMensagem("\nAtualizando status:");
+                        faturaModel.atualizarStatusDePagamento(conexao, scanner);
+                        break;
+                    case 3:
                         faturaView.exibirMensagem("\nEditando informações da fatura:");
                         faturaModel.editarFatura(conexao, scanner);
                         break;
-                    case 3:
+                    case 4:
                         faturaView.exibirMensagem("\nListando todas as faturas:");
                         faturaModel.listarFaturas(conexao);
                         break;
-                    case 4:
+                    case 5:
                         faturaView.exibirMensagem("\nRemovendo a fatura:");
                         faturaModel.removerFatura(conexao, scanner);
                         break;
-                    case 5:
+                    case 6:
                         faturaView.exibirMensagem("Saindo do menu de fatura...");
                         return;
                     default:

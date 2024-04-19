@@ -192,8 +192,10 @@ public class AnimalEstimacaoModel {
 
     public void listarAnimais(Connection conexao) {
         try {
-            // Preparar a declaração SQL para selecionar todos os animais de estimação
-            String sql = "SELECT * FROM animaldeestimacao";
+            // Preparar a declaração SQL para selecionar todos os animais de estimação com o nome do dono
+            String sql = "SELECT a.idAnimal, u.nome AS nomeDono, a.nomePet, a.racaPet, a.idadePet, a.tamanhoPet, a.pesoPet " +
+                         "FROM animaldeestimacao a " +
+                         "INNER JOIN usuario u ON a.idDono = u.id";
             PreparedStatement statement = conexao.prepareStatement(sql);
     
             // Executar a declaração SQL e obter o resultado
@@ -202,7 +204,7 @@ public class AnimalEstimacaoModel {
             // Exibir informações de todos os animais de estimação
             while (resultSet.next()) {
                 System.out.println("ID do Animal: " + resultSet.getInt("idAnimal"));
-                System.out.println("ID do Dono: " + resultSet.getInt("idDono"));
+                System.out.println("Nome do Dono: " + resultSet.getString("nomeDono"));
                 System.out.println("Nome: " + resultSet.getString("nomePet"));
                 System.out.println("Raça: " + resultSet.getString("racaPet"));
                 System.out.println("Idade: " + resultSet.getString("idadePet"));
@@ -214,6 +216,7 @@ public class AnimalEstimacaoModel {
             System.out.println("Ocorreu um erro ao listar os animais de estimação: " + ex.getMessage());
         }
     }
+    
 }
 
 
