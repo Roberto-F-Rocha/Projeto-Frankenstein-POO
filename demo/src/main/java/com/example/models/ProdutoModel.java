@@ -21,15 +21,20 @@ public class ProdutoModel {
             System.out.println("Digite o preço do produto:");
             float precoProduto = scanner.nextFloat();
             scanner.nextLine(); // Consumir a quebra de linha
+            
+            System.out.println("Digite a quantidade de itens do produto:");
+            int quantidadeItens = scanner.nextInt();
+            scanner.nextLine(); // Consumir a quebra de linha
     
             // Preparar a declaração SQL para inserir um novo produto na tabela
-            String sql = "INSERT INTO produto (nomeProduto, descricaoProduto, precoProduto) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO produto (nomeProduto, descricaoProduto, precoProduto, quantidadeItens) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = conexao.prepareStatement(sql);
     
             // Definir os valores dos parâmetros da declaração SQL com os dados do produto
             statement.setString(1, nomeProduto);
             statement.setString(2, descricaoProduto);
             statement.setFloat(3, precoProduto);
+            statement.setInt(4, quantidadeItens);
     
             // Executar a declaração SQL para inserir o produto
             statement.executeUpdate();
@@ -86,6 +91,7 @@ public class ProdutoModel {
                 System.out.println("Nome: " + resultSet.getString("nomeProduto"));
                 System.out.println("Descrição: " + resultSet.getString("descricaoProduto"));
                 System.out.println("Preço: " + resultSet.getFloat("precoProduto"));
+                System.out.println("Quantidade de Itens: " + resultSet.getInt("quantidadeItens"));
             } else {
                 System.out.println("Produto não encontrado.");
             }
@@ -100,36 +106,41 @@ public class ProdutoModel {
             System.out.println("Digite o ID do produto a ser editado:");
             int idProduto = scanner.nextInt();
             scanner.nextLine(); // Consumir a quebra de linha
-
+    
             // Solicitar as novas informações do produto via teclado
             System.out.println("Digite o novo nome do produto:");
             String novoNome = scanner.nextLine();
-
+    
             System.out.println("Digite a nova descrição do produto:");
             String novaDescricao = scanner.nextLine();
-
+    
             System.out.println("Digite o novo preço do produto:");
             float novoPreco = scanner.nextFloat();
             scanner.nextLine(); // Consumir a quebra de linha
-
+            
+            System.out.println("Digite a nova quantidade de itens do produto:");
+            int novaQuantidade = scanner.nextInt();
+            scanner.nextLine(); // Consumir a quebra de linha
+    
             // Preparar a declaração SQL para atualizar as informações do produto
-            String sql = "UPDATE produto SET nomeProduto = ?, descricaoProduto = ?, precoProduto = ? WHERE idProduto = ?";
+            String sql = "UPDATE produto SET nomeProduto = ?, descricaoProduto = ?, precoProduto = ?, QuantidadeDeItens = ? WHERE idProduto = ?";
             PreparedStatement statement = conexao.prepareStatement(sql);
-
+    
             // Definir os valores dos parâmetros da declaração SQL com as novas informações do produto
             statement.setString(1, novoNome);
             statement.setString(2, novaDescricao);
             statement.setFloat(3, novoPreco);
-            statement.setInt(4, idProduto);
-
+            statement.setInt(4, novaQuantidade);
+            statement.setInt(5, idProduto);
+    
             // Executar a declaração SQL para atualizar as informações do produto
             statement.executeUpdate();
-
+    
             System.out.println("Informações do produto atualizadas com sucesso.");
         } catch (SQLException ex) {
             System.out.println("Ocorreu um erro ao editar o produto: " + ex.getMessage());
         }
-    }
+    }    
 
     public void listarProdutos(Connection conexao) {
         try {
@@ -146,6 +157,7 @@ public class ProdutoModel {
                 System.out.println("Nome: " + resultSet.getString("nomeProduto"));
                 System.out.println("Descrição: " + resultSet.getString("descricaoProduto"));
                 System.out.println("Preço: " + resultSet.getFloat("precoProduto"));
+                System.out.println("Quantidade de Itens: " + resultSet.getInt("quantidadeItens"));
                 System.out.println("----------------------");
             }
         } catch (SQLException ex) {
@@ -153,3 +165,4 @@ public class ProdutoModel {
         }
     }
 }
+

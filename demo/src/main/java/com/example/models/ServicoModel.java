@@ -1,7 +1,6 @@
 package com.example.models;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,27 +18,9 @@ public class ServicoModel {
             System.out.println("Digite o tipo de serviço:");
             String tipoServico = scanner.nextLine();
     
-            // Obtém a data atual para a fatura
-            Date dataFatura = new Date(System.currentTimeMillis());
-
-            System.out.println("Digite o valor do serviço:");
-            float valorServico = scanner.nextFloat();
-            scanner.nextLine(); // Consumir a quebra de linha
-    
-            System.out.println("Digite o método de pagamento:");
-            String metodoPagamento = scanner.nextLine();
-    
-            System.out.println("Digite a descrição do pagamento:");
-            String descricaoPagamento = scanner.nextLine();
-    
-            System.out.println("O pagamento da fatura foi realizado? (Sim/Não):");
-            String pagamentoString = scanner.nextLine();
-            boolean pagamentoFatura = pagamentoString.equalsIgnoreCase("sim");
-    
             // Instanciar o modelo de fatura para adicionar a fatura relacionada ao serviço
             FaturaModel faturaModel = new FaturaModel();
-            faturaModel.adicionarFatura(conexao, tipoServico, idCliente, dataFatura, valorServico, metodoPagamento,
-                    descricaoPagamento, pagamentoFatura);
+            faturaModel.adicionarFatura(conexao, tipoServico, idCliente, scanner);
     
             // Preparar a declaração SQL para inserir um novo serviço na tabela
             String sql = "INSERT INTO servico (idClienteServico, tipoServico) VALUES (?, ?)";

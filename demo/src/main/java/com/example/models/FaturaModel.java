@@ -9,9 +9,31 @@ import java.util.Scanner;
 
 public class FaturaModel {
 
-    public void adicionarFatura(Connection conexao, String TipoServico, int idClienteServico, Date dataFatura, float valorFatura,
-            String metodoPagamento, String descricaoPagamento, boolean pagamentoFatura) {
+    public void adicionarFatura(Connection conexao, String TipoServico, int idClienteServico, Scanner scanner) {
         try {
+
+            Date dataFatura = new Date(System.currentTimeMillis());
+
+            System.out.println("Digite o valor do serviço:");
+            double valorFatura = scanner.nextFloat();
+            scanner.nextLine(); // Consumir a quebra de linha
+    
+            System.out.println("Digite o método de pagamento:");
+            String metodoPagamento = scanner.nextLine();
+    
+            System.out.println("Digite a descrição do pagamento:");
+            String descricaoPagamento = scanner.nextLine();
+
+            String pagamentoFatura;
+            do {
+                System.out.print("A fatura foi paga? (Sim/Não): ");
+                pagamentoFatura = scanner.nextLine().trim();
+                if (!pagamentoFatura.equalsIgnoreCase("Sim") && !pagamentoFatura.equalsIgnoreCase("Não")) {
+                    System.out.println("Entrada inválida. Por favor, digite 'Sim' ou 'Não'.");
+                }
+            } while (!pagamentoFatura.equalsIgnoreCase("Sim") && !pagamentoFatura.equalsIgnoreCase("Não"));
+
+
             // Preparar a declaração SQL para inserir uma nova fatura na tabela
             String sql = "INSERT INTO fatura (idClienteServico, tipoServico, dataFatura, valorFatura, metodoPagamento, descricaoPagamento, pagamentoFatura) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = conexao.prepareStatement(sql);
@@ -20,10 +42,55 @@ public class FaturaModel {
             statement.setInt(1, idClienteServico);
             statement.setString(2, TipoServico);
             statement.setDate(3, dataFatura);
-            statement.setFloat(4, valorFatura);
+            statement.setDouble(4, valorFatura);
             statement.setString(5, metodoPagamento);
             statement.setString(6, descricaoPagamento);
-            statement.setBoolean(7, pagamentoFatura);
+            statement.setString(7, pagamentoFatura);
+
+            // Executar a declaração SQL para inserir a fatura
+            statement.executeUpdate();
+
+            System.out.println("Fatura adicionada com sucesso.");
+        } catch (SQLException ex) {
+            System.out.println("Ocorreu um erro ao adicionar a fatura: " + ex.getMessage());
+        }
+    }
+
+    public void adicionarFaturaCompra(Connection conexao, String TipoServico, int idClienteServico, Scanner scanner, double valorFatura) {
+        try {
+
+            Date dataFatura = new Date(System.currentTimeMillis());
+
+ 
+            scanner.nextLine(); // Consumir a quebra de linha
+            System.out.println("Digite o método de pagamento:");
+            String metodoPagamento = scanner.nextLine();
+    
+            System.out.println("Digite a descrição do pagamento:");
+            String descricaoPagamento = scanner.nextLine();
+            
+            String pagamentoFatura;
+            do {
+                System.out.print("A fatura foi paga? (Sim/Não): ");
+                pagamentoFatura = scanner.nextLine().trim();
+                if (!pagamentoFatura.equalsIgnoreCase("Sim") && !pagamentoFatura.equalsIgnoreCase("Não")) {
+                    System.out.println("Entrada inválida. Por favor, digite 'Sim' ou 'Não'.");
+                }
+            } while (!pagamentoFatura.equalsIgnoreCase("Sim") && !pagamentoFatura.equalsIgnoreCase("Não"));
+
+
+            // Preparar a declaração SQL para inserir uma nova fatura na tabela
+            String sql = "INSERT INTO fatura (idClienteServico, tipoServico, dataFatura, valorFatura, metodoPagamento, descricaoPagamento, pagamentoFatura) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = conexao.prepareStatement(sql);
+
+            // Definir os valores dos parâmetros da declaração SQL com os dados da fatura
+            statement.setInt(1, idClienteServico);
+            statement.setString(2, TipoServico);
+            statement.setDate(3, dataFatura);
+            statement.setDouble(4, valorFatura);
+            statement.setString(5, metodoPagamento);
+            statement.setString(6, descricaoPagamento);
+            statement.setString(7, pagamentoFatura);
 
             // Executar a declaração SQL para inserir a fatura
             statement.executeUpdate();
